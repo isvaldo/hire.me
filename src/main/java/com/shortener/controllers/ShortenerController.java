@@ -22,6 +22,9 @@ public class ShortenerController {
     @Autowired
     private ShortenerRepository shortenerRepository;
 
+    @Autowired
+    private ShortenerBuilder shortenerBuilder;
+
     @RequestMapping("/api/create")
     public String create(@RequestParam String url,
                          @RequestParam(value="name", required = false) String name) {
@@ -29,7 +32,7 @@ public class ShortenerController {
 
         ShortenerBuilder shortener = null;
         try {
-            shortener = new ShortenerBuilder<ShortenerRepository>(url, name,shortenerRepository);
+            shortener = shortenerBuilder(url, name);
             shortenerRepository.save(shortener.getShotener());
         } catch (Exception e) {
             e.printStackTrace();
