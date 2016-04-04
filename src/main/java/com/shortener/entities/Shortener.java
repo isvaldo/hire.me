@@ -12,27 +12,34 @@ public class Shortener implements Serializable{
     private static final long serialVersionUID = 1L;
     private static long longId = 100;
 
-    private String id;
-
-    @URL
-    @NotEmpty
-    public String targeUrl;
-
-    @NotEmpty
-    public String codeName;
+    public String id;
+    public String targetUrl;
 
     @NotEmpty
     public Long views;
 
-    public Shortener(String id, String targeUrl, String codeName) {
+    public Shortener() {}
+
+    public Shortener(String id, String targetUrl) {
         this.id = id;
-        this.targeUrl = targeUrl;
-        this.codeName = codeName;
         this.views = 0L;
+        this.targetUrl = targetUrl;
     }
 
-    public static String generateNextId() {
-        return String.valueOf(longId++);
+    public static String getNextId(){
+        return String.valueOf(longId)+1;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public static long getLongId() {
+        return longId;
+    }
+
+    public static void setLongId(long longId) {
+        Shortener.longId = longId;
     }
 
     public String getId() {
@@ -43,20 +50,12 @@ public class Shortener implements Serializable{
         this.id = id;
     }
 
-    public String getTargeUrl() {
-        return targeUrl;
+    public String getTargetUrl() {
+        return targetUrl;
     }
 
-    public void setTargeUrl(String targeUrl) {
-        this.targeUrl = targeUrl;
-    }
-
-    public String getCodeName() {
-        return codeName;
-    }
-
-    public void setCodeName(String codeName) {
-        this.codeName = codeName;
+    public void setTargetUrl(String targetUrl) {
+        this.targetUrl = targetUrl;
     }
 
     public Long getViews() {

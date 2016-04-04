@@ -22,15 +22,6 @@ public class ShortenerRepository {
         redisTemplate.opsForValue().set(shortener.getId(), shortener);
     }
 
-    public boolean isCodenameInDb(final String codeName) {
-        for (String key :redisTemplate.keys("*")) {
-
-            if (findById(key).getCodeName().equals(codeName)){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Shortener findById(final String key) {
         return redisTemplate.opsForValue().get(key);
