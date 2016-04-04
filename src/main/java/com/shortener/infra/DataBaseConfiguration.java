@@ -1,6 +1,6 @@
 package com.shortener.infra;
 
-import com.shortener.entities.Shortener;
+import com.shortener.domain.entities.Shortener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

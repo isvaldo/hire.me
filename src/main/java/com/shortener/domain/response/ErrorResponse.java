@@ -1,4 +1,4 @@
-package com.shortener.infra.response;
+package com.shortener.domain.response;
 
 /**
  * Created by isvaldo on 03/04/16.

@@ -1,7 +1,8 @@
-package com.shortener.infra;
+package com.shortener.domain.services;
 
-import com.shortener.entities.Shortener;
-import com.shortener.repository.ShortenerRepository;
+import com.shortener.domain.entities.Shortener;
+import com.shortener.domain.repository.ShortenerRepository;
+import com.shortener.infra.Base62Converter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

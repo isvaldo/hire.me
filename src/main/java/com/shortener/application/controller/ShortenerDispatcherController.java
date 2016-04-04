@@ -1,9 +1,8 @@
-package com.shortener.controllers;
+package com.shortener.application.controller;
 
-import com.shortener.entities.Shortener;
-import com.shortener.infra.response.ErrorResponse;
-import com.shortener.infra.response.ShortenerResponse;
-import com.shortener.repository.ShortenerRepository;
+import com.shortener.domain.entities.Shortener;
+import com.shortener.domain.response.ErrorResponse;
+import com.shortener.domain.repository.ShortenerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +31,8 @@ public class ShortenerDispatcherController {
             return ResponseEntity.badRequest().body(new ErrorResponse(id,"002","SHORTENED URL NOT FOUND"));
         }
 
+        shortener.setViews(shortener.getViews() + 1);
+        shortenerRepository.save(shortener);
         response.sendRedirect(shortener.getTargetUrl());
         return ResponseEntity.ok().body(shortener);
     }

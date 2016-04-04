@@ -1,7 +1,6 @@
-package com.shortener.entities;
+package com.shortener.domain.entities;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.URL;
 
 import java.io.Serializable;
 

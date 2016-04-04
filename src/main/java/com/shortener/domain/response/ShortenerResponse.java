@@ -1,4 +1,4 @@
-package com.shortener.infra.response;
+package com.shortener.domain.response;
 
 import java.util.Map;
 

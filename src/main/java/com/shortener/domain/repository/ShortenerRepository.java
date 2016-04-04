@@ -1,8 +1,11 @@
-package com.shortener.repository;
+package com.shortener.domain.repository;
 
-import com.shortener.entities.Shortener;
+import com.shortener.domain.entities.Shortener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.BulkMapper;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.query.SortQuery;
+import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.stereotype.Repository;
 
 
@@ -37,5 +40,7 @@ public class ShortenerRepository {
     public Integer countAll(){
         return redisTemplate.keys("*").size();
     }
+
+
 
 }

@@ -1,16 +1,17 @@
-package com.shortener.controllers;
+package com.shortener.application.controller;
 
-import com.shortener.infra.response.ErrorResponse;
-import com.shortener.infra.ShortenerBuilder;
-import com.shortener.infra.response.ShortenerResponse;
+import com.shortener.domain.entities.Shortener;
+import com.shortener.domain.repository.ShortenerRepository;
+import com.shortener.domain.response.ErrorResponse;
+import com.shortener.domain.services.ShortenerBuilder;
+import com.shortener.domain.response.ShortenerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by isvaldo on 26/03/16.
@@ -21,6 +22,9 @@ public class ShortenerApiController {
 
     @Autowired
     private ShortenerBuilder shortenerBuilder;
+
+    @Autowired
+    private ShortenerRepository shortenerRepository;
 
     @RequestMapping(value = "/api/create", method = RequestMethod.GET)
     public ResponseEntity<?> create(@RequestParam String url,
@@ -49,8 +53,12 @@ public class ShortenerApiController {
 
 
     @RequestMapping("/api/info")
-    public void top(){
+    @ResponseBody
+    public List<Shortener> info(){
 
+        List<Shortener> shorteners = shortenerRepository.findAll();
+        Collections.sort(shorteners, (Shortener s1, Shortener s2) -> s2.views.compareTo(s1.views));
+        return shorteners;
     }
 
 }
