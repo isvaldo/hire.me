@@ -33,4 +33,9 @@ public class ShortenerRepository {
                 .map(this::findById)
                 .collect(Collectors.toList());
     }
+
+    public Integer countAll(){
+        return redisTemplate.keys("*").size();
+    }
+
 }

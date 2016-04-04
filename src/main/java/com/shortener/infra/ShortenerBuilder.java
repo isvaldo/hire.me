@@ -3,14 +3,7 @@ package com.shortener.infra;
 import com.shortener.entities.Shortener;
 import com.shortener.repository.ShortenerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
-import static com.shortener.entities.Shortener.getNextId;
 
 /**
  * Created by isvaldo on 26/03/16.
@@ -29,32 +22,34 @@ public class ShortenerBuilder {
 
     public void save(){
         if (customName == null) {
-            // gerar uma id randomica
 
-            String id = getHashName();
-            while(shortenerRepository.findById(this.id) == null)
-                id = getHashName();
+            Integer lastId = shortenerRepository.countAll();
+            String strindId = getHashName(lastId);
 
-            shortenerRepository.save(new Shortener(id, this.targetUrl));
+            while(shortenerRepository.findById(strindId) != null) {
+                lastId++;
+                strindId = getHashName(lastId);
+            }
+
+            this.id = strindId;
+            shortenerRepository.save(new Shortener(this.id, this.targetUrl));
 
         }else {
 
             if (shortenerRepository.findById(customName) == null){
+                this.id = customName;
 
-                shortenerRepository.save(new Shortener(customName, this.targetUrl));
+                shortenerRepository.save(new Shortener(this.id, this.targetUrl));
 
             }else {
-                throw new IllegalArgumentException("The custom name already exists");
+                throw new IllegalArgumentException();
             }
         }
-
     }
 
-    private String getHashName(){
-        this.id = getNextId();
-       return  Base62Converter.converter(Integer.parseInt(this.id));
+    private String getHashName(Integer id){
+       return  Base62Converter.converter(id);
     }
-
 
     public ShortenerBuilder withTargetUrl(String targetUrl){
         this.targetUrl = targetUrl;
@@ -71,4 +66,15 @@ public class ShortenerBuilder {
         return this;
     }
 
+    public String getTargetUrl() {
+        return targetUrl;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getCustomName() {
+        return customName;
+    }
 }
