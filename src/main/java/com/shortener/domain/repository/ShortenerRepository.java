@@ -42,5 +42,10 @@ public class ShortenerRepository {
     }
 
 
+    public void deleteByKey(String key){
+        redisTemplate.delete(key);
+    }
+
+
 
 }
