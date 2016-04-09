@@ -131,15 +131,14 @@ public class ApplicationTest {
 
 	@Test
 	public void shouldGenerateUnicHash(){
-		List<String> hashs = new ArrayList<>();
+		final List<String> hashs = new ArrayList<>();
 
 		for (int i = 1; i < 1000 ; i++) {
 			String hash = Base62Converter.converter(i);
-			if ( hashs.contains(hash)) {
-				System.out.println(hash);
-				System.out.println(i);
+
+			if (hashs.contains(hash))
 				Assert.fail();
-			}
+
 			hashs.add(hash);
 		}
 	}

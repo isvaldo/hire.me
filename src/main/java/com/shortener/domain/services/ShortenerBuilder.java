@@ -48,21 +48,21 @@ public class ShortenerBuilder {
         }
     }
 
-    private String getHashName(Integer id){
+    private String getHashName(final Integer id){
        return  Base62Converter.converter(id);
     }
 
-    public ShortenerBuilder withTargetUrl(String targetUrl){
+    public ShortenerBuilder withTargetUrl(final String targetUrl){
         this.targetUrl = targetUrl;
         return this;
     }
 
-    public ShortenerBuilder withCustomName(String customName) {
+    public ShortenerBuilder withCustomName(final String customName) {
         this.customName = customName;
         return this;
     }
 
-    public ShortenerBuilder withId(String id) {
+    public ShortenerBuilder withId(final String id) {
         this.id = id;
         return this;
     }
