@@ -1,5 +1,6 @@
 FROM frolvlad/alpine-oraclejdk8:slim
 VOLUME /tmp
 ADD shortener-0.0.1-SNAPSHOT.jar app.jar
+RUN apt-get update && apt-get install -y redis-server
 RUN sh -c 'touch /app.jar'
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
