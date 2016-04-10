@@ -10,6 +10,9 @@ import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.Protocol;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 
 /**
  * Created by isvaldo on 26/03/16.
@@ -40,11 +43,11 @@ public class DataBaseConfiguration {
     }
 
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
+    public JedisConnectionFactory jedisConnectionFactory() throws UnknownHostException {
 
         JedisConnectionFactory jedisConnFactory = new JedisConnectionFactory();
         jedisConnFactory.setUsePool(true);
-        jedisConnFactory.setHostName("127.0.0.1");
+        jedisConnFactory.setHostName(InetAddress.getLocalHost().getHostName());
         jedisConnFactory.setPort(6379);
         jedisConnFactory.setTimeout(Protocol.DEFAULT_TIMEOUT);
         jedisConnFactory.setPassword("");
