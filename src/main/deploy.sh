@@ -1,7 +1,7 @@
 #!/bin/bash
 #container do redis [Required by testes]
 docker run -d --name redis -p 6379:6379 redis
-docker start
+docker start redis
 #Ainda não entendi muito bem como se comunicar entre os containers
 #então estou martelando esse ip, mas pelo menos, redis e sprinb boot
 #estão separados
