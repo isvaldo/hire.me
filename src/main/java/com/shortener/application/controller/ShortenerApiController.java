@@ -7,6 +7,7 @@ import com.shortener.domain.response.ErrorResponse;
 import com.shortener.domain.services.ShortenerBuilder;
 import com.shortener.domain.response.ShortenerResponse;
 import com.shortener.infra.StatusError;
+import org.apache.commons.validator.UrlValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,15 @@ public class ShortenerApiController {
     @RequestMapping(value = "/api/create", method = RequestMethod.GET)
     public ResponseEntity<?> create(@RequestParam String url,
                                     @RequestParam(value="customName", required = false) String customName) {
-
         final Long startTime = System.currentTimeMillis();
+
+        UrlValidator urlValidator = new UrlValidator();
+        if(!urlValidator.isValid(url)){
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse("",
+                            StatusError.ERROR_103, StatusError.ERROR_103_DESCRIPTION));
+        }
+
         try {
             shortenerBuilder.
                     withTargetUrl(url).
