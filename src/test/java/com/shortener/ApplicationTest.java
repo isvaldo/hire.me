@@ -77,7 +77,8 @@ public class ApplicationTest {
     public void shouldReturnError103Test() throws Exception {
         mockMvc.perform(
                 get("/api/create?url=" + URL_TO_TEST_BAD_FORMAT + "&customName=" + ALIAS_TO_TEST)
-        ).andExpect(status().isCreated());
+        ).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.err_code", is(StatusError.ERROR_103)));
     }
 
 
