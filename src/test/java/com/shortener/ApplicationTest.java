@@ -37,7 +37,7 @@ public class ApplicationTest {
 	private ShortenerRepository shortenerRepository;
 
 
-	public String URL_TO_TEST = "http://zelda.com.br";
+	public String URL_TO_TEST = "http://zelda.com.br/";
 	public String ALIAS_TO_TEST = "zelda";
 
 	@Before

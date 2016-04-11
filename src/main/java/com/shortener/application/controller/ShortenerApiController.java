@@ -7,12 +7,16 @@ import com.shortener.domain.response.ErrorResponse;
 import com.shortener.domain.services.ShortenerBuilder;
 import com.shortener.domain.response.ShortenerResponse;
 import com.shortener.infra.StatusError;
-import org.apache.commons.validator.UrlValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -37,14 +41,8 @@ public class ShortenerApiController {
                                     @RequestParam(value="customName", required = false) String customName) {
         final Long startTime = System.currentTimeMillis();
 
-        UrlValidator urlValidator = new UrlValidator();
-        if(!urlValidator.isValid(url)){
-            return ResponseEntity.badRequest().body(
-                    new ErrorResponse("",
-                            StatusError.ERROR_103, StatusError.ERROR_103_DESCRIPTION));
-        }
-
         try {
+            new URL(url);
             shortenerBuilder.
                     withTargetUrl(url).
                     withCustomName(customName).
@@ -53,6 +51,11 @@ public class ShortenerApiController {
             return ResponseEntity.badRequest().body(
                     new ErrorResponse(shortenerBuilder.getId(),
                             StatusError.ERROR_101, StatusError.ERROR_101_DESCRIPTION));
+
+        } catch (MalformedURLException e) {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(customName,
+                            StatusError.ERROR_103, StatusError.ERROR_103_DESCRIPTION));
         }
 
         final Long endTime = System.currentTimeMillis();

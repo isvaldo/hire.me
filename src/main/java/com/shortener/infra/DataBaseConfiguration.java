@@ -4,11 +4,14 @@ import com.shortener.domain.entities.Shortener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import redis.clients.jedis.Protocol;
+
+import java.util.Optional;
 
 
 /**
@@ -44,8 +47,14 @@ public class DataBaseConfiguration {
 
         JedisConnectionFactory jedisConnFactory = new JedisConnectionFactory();
         jedisConnFactory.setUsePool(true);
-        jedisConnFactory.setHostName(System.getenv("REDIS_PORT_6379_TCP_ADDR"));
-        jedisConnFactory.setPort(6379);
+
+        // pc 32 bits, n tenho docker (:
+        // so em produção
+        String host = Optional.ofNullable(System.getenv("REDIS_PORT_6379_TCP_ADDR"))
+                .orElse("127.1.1.0");
+
+        jedisConnFactory.setHostName(host);
+            jedisConnFactory.setPort(6379);
         jedisConnFactory.setTimeout(Protocol.DEFAULT_TIMEOUT);
         jedisConnFactory.setPassword("");
         return jedisConnFactory;
