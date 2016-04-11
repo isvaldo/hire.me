@@ -44,7 +44,7 @@ public class DataBaseConfiguration {
 
         JedisConnectionFactory jedisConnFactory = new JedisConnectionFactory();
         jedisConnFactory.setUsePool(true);
-        jedisConnFactory.setHostName("127.0.0.1");
+        jedisConnFactory.setHostName(System.getenv("REDIS_PORT_6379_TCP_ADDR"));
         jedisConnFactory.setPort(6379);
         jedisConnFactory.setTimeout(Protocol.DEFAULT_TIMEOUT);
         jedisConnFactory.setPassword("");
