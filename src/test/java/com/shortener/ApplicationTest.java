@@ -28,120 +28,136 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class ApplicationTest {
 
-	@Autowired
-	private WebApplicationContext wac;
 
-	private MockMvc mockMvc;
+    @Autowired
+    private WebApplicationContext wac;
 
-	@Autowired
-	private ShortenerRepository shortenerRepository;
+    private MockMvc mockMvc;
+
+    @Autowired
+    private ShortenerRepository shortenerRepository;
+
+    private static final String URL_TO_TEST_BAD_FORMAT = "Troll://zelda.com.br/";
+    private static final String URL_TO_TEST = "http://zelda.com.br/";
+    private static final String ALIAS_TO_TEST = "zelda";
+
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        shortenerRepository.deleteByKey(ALIAS_TO_TEST);
+    }
 
 
-	public String URL_TO_TEST = "http://zelda.com.br/";
-	public String ALIAS_TO_TEST = "zelda";
+    /*************************
+     * *** Errors testes*****
+     *************************/
+    @Test
+    public void shouldReturnError101Test() throws Exception {
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(status().isCreated());
 
-	@Before
-	public void setup() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		shortenerRepository.deleteByKey(ALIAS_TO_TEST);
-	}
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(jsonPath("$.err_code", is(StatusError.ERROR_101)))
+                .andExpect(status().isBadRequest());
+    }
 
 
-	@Test
-	public void shouldBeRedirectedTest() throws Exception {
+    @Test
+    public void shouldReturnError102Test() throws Exception {
+        mockMvc.perform(
+                get("/" + ALIAS_TO_TEST)
+        ).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.err_code", is(StatusError.ERROR_102)));
+    }
 
-		mockMvc.perform(
+
+    @Test
+    public void shouldReturnError103Test() throws Exception {
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST_BAD_FORMAT + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(status().isCreated());
+    }
+
+
+    /*************************
+     * *** Life cycle testes*****
+     *************************/
+
+    @Test
+    public void shouldBeCreatedTest() throws Exception {
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(status().isCreated());
+
+        Assert.assertNotNull(shortenerRepository.findById(ALIAS_TO_TEST));
+
+    }
+
+    @Test
+    public void shouldBeRedirectedTest() throws Exception {
+
+        mockMvc.perform(
                 get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
         ).andExpect(status().isCreated());
 
 
-		mockMvc.perform(
-				get("/" + ALIAS_TO_TEST)
-		).andExpect(status().isMovedTemporarily());
-	}
+        mockMvc.perform(
+                get("/" + ALIAS_TO_TEST)
+        ).andExpect(status().isMovedTemporarily());
+    }
 
-	@Test
-	public void shouldBeCreatedTest() throws Exception {
-		mockMvc.perform(
-				get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
-		).andExpect(status().isCreated());
+    @Test
+    public void shouldReturnResponseOnCreated() throws Exception {
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(status().isCreated())
+                .andExpect(jsonPath("$.alias", is(ALIAS_TO_TEST)))
+                .andExpect(jsonPath("$.url", is(Application.SHORTENER_DOMAIN + ALIAS_TO_TEST)));
 
-		Assert.assertNotNull(shortenerRepository.findById(ALIAS_TO_TEST));
+    }
 
-	}
+    @Test
+    public void shouldReturnResponseOnCreatedAlreadyExists() throws Exception {
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(status().isCreated());
 
-
-
-	@Test
-	public void shouldReturnError101Test() throws Exception {
-		mockMvc.perform(
-				get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
-		).andExpect(status().isCreated());
-
-		mockMvc.perform(
-				get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
-		).andExpect(jsonPath("$.err_code", is(StatusError.ERROR_101)))
-				.andExpect(status().isBadRequest());
-	}
-
-
-	@Test
-	public void shouldReturnError102Test() throws Exception {
-		mockMvc.perform(
-				get("/" + ALIAS_TO_TEST)
-		).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.err_code", is(StatusError.ERROR_102)));
-	}
-
-	@Test
-	public void shouldReturnResponseOnCreated() throws Exception {
-		mockMvc.perform(
-				get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
-		).andExpect(status().isCreated())
-				.andExpect(jsonPath("$.alias", is(ALIAS_TO_TEST)))
-				.andExpect(jsonPath("$.url", is(Application.SHORTENER_DOMAIN + ALIAS_TO_TEST)));
-
-	}
-
-	@Test
-	public void shouldReturnResponseOnCreatedAlreadyExists() throws Exception {
-		mockMvc.perform(
-				get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
-		).andExpect(status().isCreated());
-
-		mockMvc.perform(
-				get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
-		).andExpect(jsonPath("$.err_code", is(StatusError.ERROR_101)))
-				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.alias", is(ALIAS_TO_TEST)))
-				.andExpect(jsonPath("$.err_code", is(StatusError.ERROR_101)))
-				.andExpect(jsonPath("$.description", is(StatusError.ERROR_101_DESCRIPTION)));
-	}
+        mockMvc.perform(
+                get("/api/create?url=" + URL_TO_TEST + "&customName=" + ALIAS_TO_TEST)
+        ).andExpect(jsonPath("$.err_code", is(StatusError.ERROR_101)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.alias", is(ALIAS_TO_TEST)))
+                .andExpect(jsonPath("$.err_code", is(StatusError.ERROR_101)))
+                .andExpect(jsonPath("$.description", is(StatusError.ERROR_101_DESCRIPTION)));
+    }
 
 
-	@Test
-	public void shouldReturnResponseOnRedirectNotFound() throws Exception {
-		mockMvc.perform(
-				get("/" + ALIAS_TO_TEST)
-		).andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.alias", is(ALIAS_TO_TEST)))
-				.andExpect(jsonPath("$.err_code", is(StatusError.ERROR_102)))
-				.andExpect(jsonPath("$.description", is(StatusError.ERROR_102_DESCRIPTION)));
-	}
+    @Test
+    public void shouldReturnResponseOnRedirectNotFound() throws Exception {
+        mockMvc.perform(
+                get("/" + ALIAS_TO_TEST)
+        ).andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.alias", is(ALIAS_TO_TEST)))
+                .andExpect(jsonPath("$.err_code", is(StatusError.ERROR_102)))
+                .andExpect(jsonPath("$.description", is(StatusError.ERROR_102_DESCRIPTION)));
+    }
 
-	@Test
-	public void shouldGenerateUnicHash(){
-		final List<String> hashs = new ArrayList<>();
 
-		for (int i = 1; i < 1000 ; i++) {
-			String hash = Base62Converter.converter(i);
+    @Test
+    public void shouldGenerateUnicHash() {
+        final List<String> hashs = new ArrayList<>();
 
-			if (hashs.contains(hash))
-				Assert.fail();
+        for (int i = 1; i < 1000; i++) {
+            String hash = Base62Converter.converter(i);
 
-			hashs.add(hash);
-		}
-	}
+            if (hashs.contains(hash))
+                Assert.fail();
+
+            hashs.add(hash);
+        }
+    }
 
 
 }
