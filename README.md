@@ -1,9 +1,6 @@
-
-
-
-
 # Hire.me
-Um pequeno projeto para testar suas habilidades como programador.
+
+Endpoint:http://pog.ninja:81/api/create?url=http://google.com&customName=bemobi
 
 ## Instruções Gerais
 
