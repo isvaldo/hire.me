@@ -7,4 +7,4 @@ export REDIS_PORT_6379_TCP_ADDR=$(docker inspect --format '{{ .NetworkSettings.I
 #Testes & docker img
 mvn package docker:build
 #container da aplicacao no ar
-docker run -d --link redis:redis -p 81:8080 shortener/shortener
+docker run -d --link redis:redis -p 80:8080 shortener/shortener

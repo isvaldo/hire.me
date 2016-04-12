@@ -1,7 +1,7 @@
 shortener:
   build: shortener
   ports:
-   - "81:8080"
+   - "80:8080"
   links:
    - redis
 
