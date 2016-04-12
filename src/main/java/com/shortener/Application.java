@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 @EnableAutoConfiguration
 @SpringBootApplication
 public class Application {
-	public static String SHORTENER_DOMAIN = "http://pog.ninja:81/";
+	public static String SHORTENER_DOMAIN = "http://pog.ninja/";
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
