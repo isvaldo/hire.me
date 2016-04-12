@@ -1,6 +1,6 @@
 # Hire.me
 
-Endpoint:http://pog.ninja:81/api/create?url=http://google.com&customName=bemobi
+Endpoint:http://pog.ninja/api/create?url=http://google.com&customName=bemobi
 
 ## Instruções Gerais
 
