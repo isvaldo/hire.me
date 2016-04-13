@@ -20,6 +20,7 @@ import java.net.URLConnection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by isvaldo on 26/03/16.
@@ -36,8 +37,8 @@ public class ShortenerApiController {
 
 
 
-    @RequestMapping(value = "/api/create", method = RequestMethod.GET)
-    public ResponseEntity<?> create(@RequestParam String url,
+    @RequestMapping(value = "/shortener", method = RequestMethod.POST)
+    public ResponseEntity<?> shortenerInsert(@RequestParam String url,
                                     @RequestParam(value="customName", required = false) String customName) {
         final Long startTime = System.currentTimeMillis();
 
@@ -71,7 +72,51 @@ public class ShortenerApiController {
     }
 
 
-    @RequestMapping("/api/info")
+    @RequestMapping(value = "/shortener", method = RequestMethod.PUT)
+    public ResponseEntity<?> shortenerUpdate(@RequestParam String name,
+                                             @RequestParam String url){
+        final  Shortener shortener = shortenerRepository.findById(name);
+        if (shortener != null) {
+            shortener.setTargetUrl(url);
+            shortenerRepository.save(shortener);
+            return ResponseEntity.status(HttpStatus.OK).body("resource updated successfully");
+        }else {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse("",
+                            StatusError.ERROR_102, StatusError.ERROR_102_DESCRIPTION));
+        }
+    }
+
+    @RequestMapping(value = "/shortener", method = RequestMethod.DELETE)
+    public ResponseEntity<?> shortenerDelete(@RequestParam String name) {
+       final  Shortener shortener = shortenerRepository.findById(name);
+        if (shortener != null) {
+            shortenerRepository.deleteByKey(name);
+            return ResponseEntity.status(HttpStatus.OK).body("resource deleted successfully");
+        }else {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse("",
+                            StatusError.ERROR_102, StatusError.ERROR_102_DESCRIPTION));
+        }
+
+    }
+
+    @RequestMapping(value = "/shortener", method = RequestMethod.GET)
+    public ResponseEntity<?> shortenerGet(@RequestParam String name){
+        final Shortener shortener = shortenerRepository.findById(name);
+        if (shortener != null) {
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(shortener);
+        }else {
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse("",
+                            StatusError.ERROR_102, StatusError.ERROR_102_DESCRIPTION));
+        }
+    }
+
+
+
+
+    @RequestMapping("/shortener/info")
     @ResponseBody
     public List<Shortener> info(){
 
