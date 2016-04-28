@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.BulkMapper;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.query.SortQuery;
 import org.springframework.data.redis.core.query.SortQueryBuilder;
+import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.stereotype.Repository;
 
 
@@ -44,6 +45,11 @@ public class ShortenerRepository {
 
     public void deleteByKey(String key){
         redisTemplate.delete(key);
+    }
+
+    public void update(String key, String field, Long value){
+        redisTemplate.setValueSerializer(new GenericToStringSerializer<Long>(Long.class));
+        redisTemplate.opsForHash().increment(key, field, value);
     }
 
 

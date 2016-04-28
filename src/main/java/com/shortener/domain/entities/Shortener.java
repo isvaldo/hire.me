@@ -8,6 +8,9 @@ import java.io.Serializable;
  * Created by isvaldo on 26/03/16.
  */
 public class Shortener implements Serializable{
+    /**
+     * Shortener ou url ou redirect, nomeação foi pessima.
+     */
     private static final long serialVersionUID = 1L;
     private static long longId = 100;
 

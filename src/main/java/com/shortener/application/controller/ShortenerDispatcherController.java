@@ -34,6 +34,16 @@ public class ShortenerDispatcherController {
                     StatusError.ERROR_102_DESCRIPTION));
         }
 
+
+        /*
+        * shortenerRepository.update(id, "views", 1L)
+        * Redis tem o HINCRBY, mas não consegui implementar aqui
+        * WRONGTYPE Operation against a key holding
+        * Estou errando algum conceito no redis.
+        *
+        * TODO: tentar essa solução: com RedisAtomicLong
+        * https://github.com/spring-projects/spring-data-keyvalue-examples/blob/master/retwisj/src/main/java/org/springframework/data/redis/samples/retwisj/redis/RetwisRepository.java
+        * */
         shortener.setViews(shortener.getViews() + 1);
         shortenerRepository.save(shortener);
         response.sendRedirect(shortener.getTargetUrl());

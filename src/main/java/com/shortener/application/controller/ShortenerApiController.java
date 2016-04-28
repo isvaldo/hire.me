@@ -114,6 +114,16 @@ public class ShortenerApiController {
     @RequestMapping("/shortener/info")
     @ResponseBody
     public List<Shortener> info(){
+        /*
+        http://stackoverflow.com/questions/35635337/spring-redis-sort-keys
+        melhor cenario seria utilizar uma busca com redis
+
+        SortQuery<String> query = SortQueryBuilder.sort(key).noSort().get(pidKey).get(pid + uid).get(pid + content).get(
+				pid + replyPid).get(pid + replyUid).get(pid + time).limit(range.begin, range.end).build();
+	    Ainda estou buscando uma solução para isso, todas as tentativas com SortQuery retornam um conjunto vazio ):
+
+         */
+
         final List<Shortener> shorteners = shortenerRepository.findAll();
         Collections.sort(shorteners, (Shortener s1, Shortener s2) -> s2.views.compareTo(s1.views));
         return shorteners;
