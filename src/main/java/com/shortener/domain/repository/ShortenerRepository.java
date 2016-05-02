@@ -43,7 +43,7 @@ public class ShortenerRepository {
         final Set<String> keys = redisTemplate.keys(URL_PREFIX + "*");
         List<Shortener> shorteners = new ArrayList<>();
         for (String key: keys) {
-            shorteners.add(findById(key));
+            shorteners.add(findById(key.replace(URL_PREFIX,"")));
         }
         return shorteners;
     }
@@ -57,8 +57,8 @@ public class ShortenerRepository {
         redisTemplate.delete(VIEWS_PREFIX+key);
     }
 
-    public void update(String key, String field, Long value){
-        redisTemplate.opsForHash().increment(key, field, value);
+    public void update(String key, Long value){
+        redisTemplate.opsForValue().increment(VIEWS_PREFIX+key, value);
     }
 
 
