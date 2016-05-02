@@ -1,4 +1,5 @@
 [![Stories in Ready](https://badge.waffle.io/isvaldo/hire.me.png?label=ready&title=Ready)](https://waffle.io/isvaldo/hire.me)
+[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 ![Bateria de testes](https://codeship.com/projects/bbbf6bf0-e1ba-0133-e590-4a308660d35a/status?branch=master)
 # Hire.me
 
