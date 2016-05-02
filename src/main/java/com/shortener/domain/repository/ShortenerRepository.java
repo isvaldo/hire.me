@@ -2,13 +2,9 @@ package com.shortener.domain.repository;
 
 import com.shortener.domain.entities.Shortener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.BulkMapper;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.query.SortQuery;
-import org.springframework.data.redis.core.query.SortQueryBuilder;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.stereotype.Repository;
-
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,13 +38,11 @@ public class ShortenerRepository {
         return redisTemplate.keys("*").size();
     }
 
-
     public void deleteByKey(String key){
         redisTemplate.delete(key);
     }
 
     public void update(String key, String field, Long value){
-        redisTemplate.setValueSerializer(new GenericToStringSerializer<Long>(Long.class));
         redisTemplate.opsForHash().increment(key, field, value);
     }
 
