@@ -28,6 +28,12 @@ public class Shortener implements Serializable{
         this.targetUrl = targetUrl;
     }
 
+    public Shortener(String id, String targetUrl,Long views) {
+        this.id = id;
+        this.views = views;
+        this.targetUrl = targetUrl;
+    }
+
     public static String getNextId(){
         return String.valueOf(longId)+1;
     }

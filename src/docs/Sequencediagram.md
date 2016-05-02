@@ -100,9 +100,11 @@ Database->Shortener: Returns ok
 Shortener->Client: HTTP 200: resource deleted successfully
 
 Client->Shortener: GET http://pog.ninja/bemobi
-Shortener->Database: Calls fetch(name)
+Shortener->Database: Calls findByName(name)
 Shortener->Database: Calls update(views)
-Database->Shortener: Returns http://example.com
+Database->Shortener: Returns http://zelda.com
 Shortener->Client: HTTP 302: Redirects to http http://zelda.com
+
+
 
 ```

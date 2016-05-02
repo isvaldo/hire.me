@@ -44,8 +44,8 @@ public class ShortenerDispatcherController {
         * TODO: tentar essa solução: com RedisAtomicLong
         * https://github.com/spring-projects/spring-data-keyvalue-examples/blob/master/retwisj/src/main/java/org/springframework/data/redis/samples/retwisj/redis/RetwisRepository.java
         * */
-        shortener.setViews(shortener.getViews() + 1);
-        shortenerRepository.save(shortener);
+        //shortener.setViews(shortener.getViews() + 1);
+        //shortenerRepository.save(shortener);
         response.sendRedirect(shortener.getTargetUrl());
         return ResponseEntity.accepted().body(shortener);
     }

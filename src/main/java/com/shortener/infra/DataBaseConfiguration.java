@@ -28,14 +28,15 @@ public class DataBaseConfiguration {
         return new StringRedisSerializer();
     }
 
+
     @Bean
-    public JacksonJsonRedisSerializer<Shortener> jacksonJsonRedisSerializer(){
-        return new JacksonJsonRedisSerializer<Shortener>(Shortener.class);
+    public JacksonJsonRedisSerializer<Object> jacksonJsonRedisSerializer(){
+        return new JacksonJsonRedisSerializer<>(Object.class);
     }
 
     @Bean
-    public RedisTemplate<String, Shortener> redisTemplate() {
-        RedisTemplate<String, Shortener> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory);
         redisTemplate.setKeySerializer(stringRedisSerializer());
         redisTemplate.setValueSerializer(jacksonJsonRedisSerializer());
