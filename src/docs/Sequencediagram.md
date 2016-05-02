@@ -25,8 +25,8 @@ end
 Shortener->Database: CheckIfExist(name)
 Shortener->Database: Calls set(url, name, views)
 Database->Shortener: Returns ok
-Shortener->Client: Returns ok
 
+Shortener->Client: HTTP 201: Created
 note left of Shortener
     {
     alias: zelda,
@@ -36,7 +36,7 @@ note left of Shortener
     }
 end note
 
-Shortener->Client: HTTP 200: Created
+
 
 
 Client->Shortener: GET http://pog.ninja/shortener
@@ -100,10 +100,12 @@ Database->Shortener: Returns ok
 Shortener->Client: HTTP 200: resource deleted successfully
 
 Client->Shortener: GET http://pog.ninja/bemobi
-Shortener->Database: Calls findByName(name)
+Shortener->Database: Calls fetch(name)
 Shortener->Database: Calls update(views)
-Database->Shortener: Returns http://zelda.com
+Database->Shortener: Returns http://example.com
 Shortener->Client: HTTP 302: Redirects to http http://zelda.com
+
+
 
 
 
